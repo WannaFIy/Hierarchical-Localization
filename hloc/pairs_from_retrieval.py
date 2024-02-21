@@ -102,8 +102,11 @@ def main(
     if len(db_names) == 0:
         raise ValueError("Could not find any database image.")
     query_names = parse_names(query_prefix, query_list, query_names_h5)
-
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    
+    with open('gpu.txt', 'r') as f:
+        gpu = f.read()
+    device = f"cuda:{gpu}" if torch.cuda.is_available() else "cpu"
+    
     db_desc = get_descriptors(db_names, db_descriptors, name2db)
     query_desc = get_descriptors(query_names, descriptors)
     sim = torch.einsum("id,jd->ij", query_desc.to(device), db_desc.to(device))
