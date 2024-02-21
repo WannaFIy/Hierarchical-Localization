@@ -226,7 +226,10 @@ def match_from_paths(
         logger.info("Skipping the matching.")
         return
         
-    with open('gpu.txt', 'r') as f:
+    import inspect, os.path
+    filename = inspect.getframeinfo(inspect.currentframe()).filename
+    path     = os.path.dirname(os.path.abspath(filename))
+    with open(f'{path}/gpu.txt', 'r') as f:
         gpu = f.read()
     device = f"cuda:{gpu}" if torch.cuda.is_available() else "cpu"
     
