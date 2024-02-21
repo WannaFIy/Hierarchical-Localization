@@ -225,8 +225,11 @@ def match_from_paths(
     if len(pairs) == 0:
         logger.info("Skipping the matching.")
         return
-
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+        
+    with open('gpu.txt', 'r') as f:
+        gpu = f.read()
+    device = f"cuda:{gpu}" if torch.cuda.is_available() else "cpu"
+    
     Model = dynamic_load(matchers, conf["model"]["name"])
     model = Model(conf["model"]).eval().to(device)
 
