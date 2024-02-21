@@ -102,8 +102,11 @@ def main(
     if len(db_names) == 0:
         raise ValueError("Could not find any database image.")
     query_names = parse_names(query_prefix, query_list, query_names_h5)
-    
-    with open('gpu.txt', 'r') as f:
+
+    import inspect, os.path
+    filename = inspect.getframeinfo(inspect.currentframe()).filename
+    path     = os.path.dirname(os.path.abspath(filename))
+    with open(f'{path}/gpu.txt', 'r') as f:
         gpu = f.read()
     device = f"cuda:{gpu}" if torch.cuda.is_available() else "cpu"
     
