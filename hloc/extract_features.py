@@ -244,7 +244,9 @@ def main(
         logger.info("Skipping the extraction.")
         return feature_path
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    with open('gpu.txt', 'r') as f:
+        gpu = f.read()
+    device = f"cuda:{gpu}" if torch.cuda.is_available() else "cpu"
     Model = dynamic_load(extractors, conf["model"]["name"])
     model = Model(conf["model"]).eval().to(device)
 
